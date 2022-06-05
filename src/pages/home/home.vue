@@ -20,7 +20,8 @@ onSnapshot(productsColRef, (snap) => {
 
 <template>
   <div class="flex flex-col justify-center items-center gap-4 w-full p-6">
-    <InventoryList :productList="productList"/>
+    <p class="text-3xl text-white">Inventory</p>
     <AddProductForm />
+    <InventoryList :productList="productList"/>
   </div>
 </template>

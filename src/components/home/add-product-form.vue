@@ -3,7 +3,7 @@ import { ref } from 'vue';
 import { addDoc } from 'firebase/firestore';
 import { productsColRef } from '../../../firebase-config';
 import InputSet from '../../common/input-set.vue';
-import FormButton from '../../common/form-button.vue';
+import CustomButton from '../../common/custom-button.vue';
 
 const product = ref({})
 const productName = ref()
@@ -58,8 +58,8 @@ const getQuantity = e => {
     <InputSet :isPrimary="true" :value="quantity" :label="'Quantity'" :type="'number'" :placeholder="''"
       :onChange="getQuantity" />
     <div class="flex items-center gap-4 mt-2">
-      <FormButton :isPrimary="false" />
-      <FormButton :isPrimary="true" />
+      <CustomButton :isPrimary="false" />
+      <CustomButton :isPrimary="true" />
     </div>
   </form>
 </template>
