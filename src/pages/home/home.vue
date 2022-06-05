@@ -1,7 +1,26 @@
 <script setup>
-import InventoryTable from '../../components/home/inventory-table.vue';
+import { ref } from 'vue';
+import { onSnapshot } from 'firebase/firestore';
+import { productsColRef } from '../../../firebase-config';
+import InventoryList from '../../components/home/inventory-list.vue';
+import AddProductForm from '../../components/home/add-product-form.vue';
+
+const productList = ref([])
+
+onSnapshot(productsColRef, (snap) => {
+  productList.value = snap.docs.map(e => ({
+    name: e.data().name,
+    price: "₱" + e.data().price + ".00",
+    quantity: e.data().quantity + " left", 
+    id: e.id
+  }))
+})
+
 </script>
 
 <template>
-  <InventoryTable />
+  <div class="flex flex-col justify-center items-center gap-4 w-full p-6">
+    <InventoryList :productList="productList"/>
+    <AddProductForm />
+  </div>
 </template>

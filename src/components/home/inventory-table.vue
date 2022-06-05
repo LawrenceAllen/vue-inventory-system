@@ -38,12 +38,13 @@ const items: Item[] = newProductList;
 </script>
 
 <template>
-  <div class="mt-96">
+  <div class="flex flex-col gap-4 w-full">
+    <p class="text-3xl text-white">Inventory</p>
     <EasyDataTable
       class="text-black fill-black bg-white"
       border-color="#064e3b"
       header-background-color="#34d399"
-      body-font-size="16"
+      body-font-size=16
       :headers="headers" 
       :items="items"
     />
