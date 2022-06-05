@@ -29,7 +29,7 @@ const props = withDefaults(defineProps<props>(), {
   <div v-if="props.isPrimary" class="flex flex-col w-full">
     <p class="text-md font-semibold w-full">{{ props.label }}</p>
     <input
-      class="h-9 p-2 rounded" 
+      class="h-9 p-2 rounded focus:outline-none focus:ring-2 focus:ring-emerald-900" 
       :value="props.value"
       :type="props.type" 
       :placeholder="props.placeholder"
@@ -39,7 +39,7 @@ const props = withDefaults(defineProps<props>(), {
   <div v-else class="flex flex-col w-full">
     <p class="text-md text-white font-semibold w-full">{{ props.label }}</p>
     <input
-      class="h-9 p-2 rounded" 
+      class="h-9 p-2 rounded focus:outline-none focus:ring-2 focus:ring-emerald-500" 
       :value="props.value"
       :type="props.type" 
       :placeholder="props.placeholder"
