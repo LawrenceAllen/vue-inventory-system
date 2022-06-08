@@ -1,20 +1,31 @@
 <script lang="ts" setup>
 
+const emits = defineEmits(["onClick"])
+
+const onClick = () => {
+  emits("onClick")
+}
+
 interface props {
-  isPrimary: boolean
+  buttonType: string
+  value: string
 }
 
 const props = withDefaults(defineProps<props>(), {
-  isPrimary: true
+  isPrimary: true,
+  value: "Button"
 });
 
 </script>
 
 <template>
-  <button v-if="isPrimary" class="p-1 w-full bg-blue-500 rounded-md">
-    <p class="text-white text-lg font-semibold">Save</p>
+  <button v-if="buttonType === 'save'" class="p-1 w-full bg-emerald-900 rounded-md" @click="onClick">
+    <p class="text-white text-lg font-semibold">{{ props.value }}</p>
   </button>
-  <button v-else class="p-1 w-full bg-emerald-600 rounded-md">
-    <p class="text-white text-lg font-semibold">Cancel</p>
+  <button v-else-if="buttonType === 'cancel'" class="p-1 w-full bg-emerald-100 rounded-md" @click="onClick">
+    <p class="text-black text-lg font-semibold">{{ props.value }}</p>
+  </button>
+  <button v-else class="p-1 w-full bg-emerald-400 rounded-md" @click="onClick">
+    <p class="text-emerald-900 text-lg font-semibold">{{ props.value }}</p>
   </button>
 </template>
