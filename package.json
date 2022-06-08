@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "firebase": "^9.8.2",
+    "oh-vue-icons": "^1.0.0-rc3",
     "vue": "^3.2.36",
     "vue3-easy-data-table": "^1.0.11"
   },
