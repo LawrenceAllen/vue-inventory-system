@@ -58,7 +58,8 @@ const getQuantity = e => {
 </script>
 
 <template>
-  <div v-if="props.showComponent" class="bg-emerald-400 w-full p-4 drop-shadow-md rounded">
+  <div v-if="props.showComponent" class="flex flex-col bg-emerald-400 w-full p-4 drop-shadow-md rounded">
+    <v-icon class="ml-auto fill-red-600" name="io-close" scale="2.2" @click="$emit('cancelHandler')"/>
     <form class="flex flex-col gap-4" @submit="submitHandler">
       <InputSet :isPrimary="true" :value="productName" :label="'Product Name'" :type="'text'" :placeholder="''"
         :onChange="getProductName" />
@@ -66,9 +67,8 @@ const getQuantity = e => {
         :onChange="getPrice" />
       <InputSet :isPrimary="true" :value="quantity" :label="'Quantity'" :type="'number'" :placeholder="''"
         :onChange="getQuantity" />
-      <CustomButton class="mt-2 h-12" :buttonType="'save'" :value="'Save'" />
+      <CustomButton class="mt-2 h-10" :buttonType="'save'" :value="'Save'" />
     </form>
-    <CustomButton class="mt-2 h-12" :buttonType="'cancel'" :value="'Cancel'" @click="$emit('cancelHandler')"/>
   </div>
   <div v-else></div>
 </template>
