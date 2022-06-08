@@ -10,12 +10,7 @@ const productList = ref([])
 const showAddProductForm = ref(false)
 
 onSnapshot(productsColRef, (snap) => {
-  productList.value = snap.docs.map(e => ({
-    name: e.data().name,
-    price: "₱" + e.data().price + ".00",
-    quantity: e.data().quantity + " left", 
-    id: e.id
-  }))
+  productList.value = snap.docs.map(e => ({...e.data(), id: e.id}))
 })
 
 const setShowAddProductForm = () => {
@@ -32,7 +27,7 @@ const setShowAddProductForm = () => {
   <div class="flex flex-col justify-center items-center gap-4 w-full p-6">
     <p class="text-3xl text-white">Inventory</p>
     <CustomButton v-if="!showAddProductForm" :buttonType="'else'" :value="'Add Product'" :onClick="setShowAddProductForm"/>
-    <AddProductForm :showComponent="showAddProductForm" @cancelHandler="setShowAddProductForm"/>
+    <AddProductForm :showComponent="showAddProductForm" :productList="productList" @cancelHandler="setShowAddProductForm"/>
     <InventoryList :productList="productList"/>
   </div>
 </template>
