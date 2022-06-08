@@ -1,3 +1,3 @@
 # Vue Inventory System
 
-This application is built with script setup syntax of Vue.js paired with TailwindCSS for styling
+A Basic Inventory System built with Vue 3, TailwindCSS, and Firestore.
