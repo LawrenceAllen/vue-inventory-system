@@ -67,7 +67,7 @@ const getQuantity = e => {
         :onChange="getPrice" />
       <InputSet :isPrimary="true" :value="quantity" :label="'Quantity'" :type="'number'" :placeholder="''"
         :onChange="getQuantity" />
-      <CustomButton class="mt-2 h-10" :buttonType="'save'" :value="'Save'" />
+      <CustomButton class="text-white mt-2 h-10" :buttonType="'save'" :value="'Save'" />
     </form>
   </div>
   <div v-else></div>

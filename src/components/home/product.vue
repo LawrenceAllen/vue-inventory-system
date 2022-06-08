@@ -1,11 +1,13 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
+import { productsColRef } from '../../../firebase-config';
+import { doc, updateDoc } from 'firebase/firestore';
 import CustomText from '../../common/custom-text.vue';
-import QuantityModal from './quantity-modal.vue';
+import CustomButton from '../../common/custom-button.vue';
 
 const touchStartX = ref(0)
 const touchEndX = ref(0)
-const showConfirmModal = ref(false)
+const showQuantityButtons = ref(false)
 
 interface props {
   productID: string
@@ -23,13 +25,9 @@ const props = withDefaults(defineProps<props>(), {
   productOrder: 0
 });
 
-const hideModal = () => {
-  showConfirmModal.value = false
-}
-
 const checkDirection = () => {
   if (touchEndX.value > touchStartX.value) {
-    showConfirmModal.value = true
+    showQuantityButtons.value = true
   }
 }
 
@@ -42,15 +40,33 @@ const getTouchEnd = e => {
   checkDirection()
 }
 
+const decreaseQuantity = () => {
+  const productDocRef = doc(productsColRef, props.productID)
+  updateDoc(productDocRef, { quantity: props.productQuantity - 1 })
+}
+
+const cancelQuantityDecrease = () => {
+  showQuantityButtons.value = false
+}
+
 </script>
 
 <template>
-  <div class="bg-emerald-500 p-4 rounded" :id="productID" @touchstart="e => getTouchStart(e)"
-    @touchend="e => getTouchEnd(e)">
-    <CustomText :value="productName" :isPrimary="true" />
-    <CustomText :value="'Price: ' + '₱' + productPrice" :isPrimary="false" />
-    <CustomText :value="'Quantity: ' + productQuantity + ' left'" :isPrimary="false" />
+  <div class="flex flex-col gap-2">
+    <div 
+      class="bg-emerald-500 p-4 rounded w-full" 
+      :id="productID"
+      @touchstart="e => getTouchStart(e)" 
+      @touchend="e => getTouchEnd(e)"
+    >
+      <CustomText :value="productName" :isPrimary="true" />
+      <CustomText :value="'Price: ' + '₱' + productPrice" :isPrimary="false" />
+      <CustomText :value="'Quantity: ' + productQuantity + ' left'" :isPrimary="false" />
+    </div>
+    <div v-if="showQuantityButtons" class="flex flex-col gap-2">
+      <CustomButton class="text-black h-12" :buttonType="'else'" :value="'Decrease Quantity'" @click="decreaseQuantity"/>
+      <CustomButton class="text-emerald-900 h-10" :buttonType="'cancel'" :value="'Cancel'" @click="cancelQuantityDecrease"/>
+    </div>
   </div>
-  <QuantityModal :showModal="showConfirmModal" @cancelHandler="hideModal" :productID="productID"
-    :productQuantity="productQuantity" />
+
 </template>
