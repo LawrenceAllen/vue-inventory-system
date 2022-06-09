@@ -24,7 +24,7 @@ const setShowAddProductForm = () => {
 </script>
 
 <template>
-  <div class="flex flex-col justify-center items-center gap-4 w-full p-6">
+  <div class="flex flex-col justify-center items-center gap-4 w-full">
     <p class="text-3xl text-white">Inventory</p>
     <CustomButton 
       v-if="!showAddProductForm" 

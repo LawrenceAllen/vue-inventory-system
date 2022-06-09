@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
-import { productsColRef } from '../../../firebase-config';
-import { doc, updateDoc, deleteDoc } from 'firebase/firestore';
+import { productsColRef, soldColRef } from '../../../firebase-config';
+import { doc, addDoc, updateDoc, deleteDoc } from 'firebase/firestore';
 import CustomText from '../../common/custom-text.vue';
 import CustomButton from '../../common/custom-button.vue';
 import InputSet from '../../common/input-set.vue';
@@ -51,8 +51,13 @@ const getTouchEnd = e => {
 }
 
 const decreaseQuantity = () => {
+  const currentDate = new Date().toLocaleDateString('en-US', {month: "long", day: "numeric", year: "numeric"})
   const productDocRef = doc(productsColRef, props.productID)
   updateDoc(productDocRef, { quantity: props.productQuantity - 1 })
+  addDoc(soldColRef, {
+    name: props.productName,
+    date_sold: currentDate
+  })
 }
 
 const closeButtons = () => {

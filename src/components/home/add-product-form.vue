@@ -16,7 +16,8 @@ const props = withDefaults(defineProps<props>(), {
 });
 
 const productName = ref('')
-const price = ref()
+const actualPrice = ref()
+const retailPrice = ref()
 const quantity = ref()
 
 const submitHandler = e => {
@@ -24,8 +25,11 @@ const submitHandler = e => {
   if (productName.value === undefined || productName.value === '') {
     alert("Please insert a product name.");
     return
-  } else if (price.value === undefined || price.value === 0) {
-    alert("Please insert the price.");
+  } else if (actualPrice.value === undefined || actualPrice.value === 0) {
+    alert("Please insert the actual price.");
+    return
+  } else if (retailPrice.value === undefined || retailPrice.value === 0) {
+    alert("Please insert the retail price.");
     return
   } else if (quantity.value === undefined || quantity.value === 0) {
     alert("Please insert the quantity.");
@@ -34,12 +38,14 @@ const submitHandler = e => {
   const highest = Math.max(...props.productList.map(e => e.order), 0)
   addDoc(productsColRef, {
     name: productName.value,
-    price: price.value,
+    actual_price: actualPrice.value,
+    retail_price: retailPrice.value,
     quantity: quantity.value,
     order: highest + 1
   })
   productName.value = ''
-  price.value = undefined
+  actualPrice.value = undefined
+  retailPrice.value =  undefined
   quantity.value = undefined
 }
 
@@ -47,8 +53,12 @@ const getProductName = e => {
   productName.value = e.target.value
 }
 
-const getPrice = e => {
-  price.value = Number(e.target.value)
+const getActualPrice = e => {
+  actualPrice.value = Number(e.target.value)
+}
+
+const getRetailPrice = e => {
+  retailPrice.value = Number(e.target.value)
 }
 
 const getQuantity = e => {
@@ -70,11 +80,19 @@ const getQuantity = e => {
       />
       <InputSet 
         :isPrimary="true" 
-        :value="price" 
-        :label="'Price'" 
+        :value="actualPrice" 
+        :label="'Actual Price'" 
         :type="'number'" 
         :placeholder="''"
-        :onChange="getPrice"
+        :onChange="getActualPrice"
+      />
+      <InputSet 
+        :isPrimary="true" 
+        :value="retailPrice" 
+        :label="'Retail Price'" 
+        :type="'number'" 
+        :placeholder="''"
+        :onChange="getRetailPrice"
       />
       <InputSet 
         :isPrimary="true" 
