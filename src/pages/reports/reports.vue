@@ -7,6 +7,7 @@ import Sold from '../../components/reports/sold.vue'
 const soldItemsList = ref([])
 const sortedSoldItemsList = ref([])
 const currentMonthSoldItems = ref([])
+const newCurrentMonthSoldItems = ref([])
 const monthYear = ref('')
 
 onSnapshot(soldColRef, (snap) => {
@@ -22,7 +23,7 @@ watchEffect(() => {
   currentMonthSoldItems.value = sortedSoldItemsList.value.map((e) => ({
     month: e.date_sold.split(" ").at(0) + " " + e.date_sold.split(" ").at(2)
   }))
-  currentMonthSoldItems.value = currentMonthSoldItems.value.filter(e => e.month.includes(monthYear))
+  currentMonthSoldItems.value = currentMonthSoldItems.value.filter(e => e.month === monthYear.value)
 })
 
 </script>
