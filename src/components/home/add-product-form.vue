@@ -58,16 +58,18 @@ const getQuantity = e => {
 </script>
 
 <template>
-  <div v-if="props.showComponent" class="flex flex-col bg-emerald-400 w-full p-4 drop-shadow-md rounded">
-    <v-icon class="ml-auto fill-red-600" name="io-close" scale="2.2" @click="$emit('cancelHandler')"/>
+  <div v-if="props.showComponent" class="bg-emerald-400 w-full p-4 drop-shadow-md rounded">
     <form class="flex flex-col gap-4" @submit="submitHandler">
       <InputSet :isPrimary="true" :value="productName" :label="'Product Name'" :type="'text'" :placeholder="''"
         :onChange="getProductName" />
       <InputSet :isPrimary="true" :value="price" :label="'Price'" :type="'number'" :placeholder="''"
         :onChange="getPrice" />
-      <InputSet :isPrimary="true" :value="quantity" :label="'Quantity'" :type="'number'" :placeholder="''"
-        :onChange="getQuantity" />
-      <CustomButton class="text-white mt-2 h-10" :buttonType="'save'" :value="'Save'" />
+      <InputSet :isPrimary="true" :value="quantity" :label="'Quantity'" :type="'number'" :placeholder="''" :onChange="getQuantity" />
+      <div class="flex justify-between items-center gap-4 w-full">
+        <CustomButton class="text-black h-10" :buttonType="'cancel'" :value="'Cancel'"
+          @click="$emit('cancelHandler')" />
+        <CustomButton class="text-white h-10" :buttonType="'save'" :value="'Save'" />
+      </div>
     </form>
   </div>
   <div v-else></div>

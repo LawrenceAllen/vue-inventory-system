@@ -26,10 +26,8 @@ const props = withDefaults(defineProps<props>(), {
 });
 
 const checkDirection = () => {
-  if (touchEndX.value > 0) {
-    if (touchEndX.value > touchStartX.value) {
-      showQuantityButtons.value = true
-    }
+  if (Math.abs((touchStartX.value - touchEndX.value)) > 250 ) {
+    showQuantityButtons.value = true
   }
 }
 
