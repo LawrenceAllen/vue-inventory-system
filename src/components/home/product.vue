@@ -26,9 +26,13 @@ const props = withDefaults(defineProps<props>(), {
 });
 
 const checkDirection = () => {
-  if (touchEndX.value > touchStartX.value) {
-    showQuantityButtons.value = true
+  if (touchEndX.value > 0) {
+    if (touchEndX.value > touchStartX.value) {
+      showQuantityButtons.value = true
+    }
   }
+
+
 }
 
 const getTouchStart = e => {
@@ -53,19 +57,17 @@ const cancelQuantityDecrease = () => {
 
 <template>
   <div class="flex flex-col gap-2">
-    <div 
-      class="bg-emerald-500 p-4 rounded w-full" 
-      :id="productID"
-      @touchstart="e => getTouchStart(e)" 
-      @touchend="e => getTouchEnd(e)"
-    >
+    <div class="bg-emerald-500 p-4 rounded w-full" :id="productID" @touchstart="e => getTouchStart(e)"
+      @touchend="e => getTouchEnd(e)">
       <CustomText :value="productName" :isPrimary="true" />
       <CustomText :value="'Price: ' + '₱' + productPrice" :isPrimary="false" />
       <CustomText :value="'Quantity: ' + productQuantity + ' left'" :isPrimary="false" />
     </div>
     <div v-if="showQuantityButtons" class="flex flex-col gap-2">
-      <CustomButton class="text-black h-12" :buttonType="'else'" :value="'Decrease Quantity'" @click="decreaseQuantity"/>
-      <CustomButton class="text-emerald-900 h-10" :buttonType="'cancel'" :value="'Cancel'" @click="cancelQuantityDecrease"/>
+      <CustomButton class="text-black h-12" :buttonType="'else'" :value="'Decrease Quantity'"
+        @click="decreaseQuantity" />
+      <CustomButton class="text-emerald-900 h-10" :buttonType="'cancel'" :value="'Cancel'"
+        @click="cancelQuantityDecrease" />
     </div>
   </div>
 
