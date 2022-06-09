@@ -66,9 +66,9 @@ const getQuantity = e => {
         :onChange="getPrice" />
       <InputSet :isPrimary="true" :value="quantity" :label="'Quantity'" :type="'number'" :placeholder="''" :onChange="getQuantity" />
       <div class="flex justify-between items-center gap-4 w-full">
-        <CustomButton class="text-black h-10" :buttonType="'cancel'" :value="'Cancel'"
+        <CustomButton class="text-black h-10 rounded" :buttonType="'cancel'" :value="'Cancel'"
           @click="$emit('cancelHandler')" />
-        <CustomButton class="text-white h-10" :buttonType="'save'" :value="'Save'" />
+        <CustomButton class="text-white h-10 rounded" :buttonType="'save'" :value="'Save'" />
       </div>
     </form>
   </div>
