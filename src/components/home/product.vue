@@ -24,7 +24,7 @@ const props = withDefaults(defineProps<props>(), {
 
 const touchStartX = ref(0)
 const touchEndX = ref(0)
-const quantityButtons = ref(false)
+const decreaseQuantityButton = ref(false)
 const sideButtons = ref(false)
 const editFields = ref(false)
 const newProductName = ref(props.productName)
@@ -33,10 +33,10 @@ const newQuantity = ref(props.productQuantity)
 
 const checkDirection = () => {
   if ((touchStartX.value - touchEndX.value) < -250) {
-    quantityButtons.value = true
+    decreaseQuantityButton.value = true
     sideButtons.value = false
   } else if ((touchStartX.value - touchEndX.value) > 250) {
-    quantityButtons.value = false
+    decreaseQuantityButton.value = false
     sideButtons.value = true
   }
 }
@@ -55,11 +55,8 @@ const decreaseQuantity = () => {
   updateDoc(productDocRef, { quantity: props.productQuantity - 1 })
 }
 
-const closeQuantityDecrease = () => {
-  quantityButtons.value = false
-}
-
-const closeSideButtons = () => {
+const closeButtons = () => {
+  decreaseQuantityButton.value = false
   sideButtons.value = false
 }
 
@@ -105,34 +102,79 @@ const deleteProduct = e => {
 <template>
   <div class="flex flex-col gap-2">
     <form v-if="editFields" class="flex flex-col gap-4 bg-emerald-500 p-4" @submit="updateProduct">
-      <InputSet :isPrimary="true" :value="newProductName" :label="'Product Name'" :type="'text'" :placeholder="''"
-        :onChange="getNewProductName" />
-      <InputSet :isPrimary="true" :value="newPrice" :label="'Price'" :type="'number'" :placeholder="''"
-        :onChange="getNewPrice" />
-      <InputSet :isPrimary="true" :value="newQuantity" :label="'Quantity'" :type="'number'" :placeholder="''" :onChange="getNewQuantity" />
+      <InputSet 
+        :isPrimary="true" 
+        :value="newProductName" 
+        :label="'Product Name'" 
+        :type="'text'" 
+        :placeholder="''"
+        :onChange="getNewProductName" 
+      />
+      <InputSet 
+        :isPrimary="true" 
+        :value="newPrice" 
+        :label="'Price'" 
+        :type="'number'" 
+        :placeholder="''"
+        :onChange="getNewPrice" 
+      />
+      <InputSet 
+        :isPrimary="true" 
+        :value="newQuantity" 
+        :label="'Quantity'" 
+        :type="'number'" 
+        :placeholder="''" 
+        :onChange="getNewQuantity" 
+      />
       <div class="flex justify-between items-center gap-4 w-full">
-        <CustomButton class="text-black h-10 rounded" :buttonType="'cancel'" :value="'Cancel'"
-          @click="closeEditFields" />
-        <CustomButton class="text-white h-10 rounded" :buttonType="'save'" :value="'Save'" />
+        <CustomButton 
+          class="text-black h-10 rounded" 
+          :buttonType="'cancel'" 
+          :value="'Cancel'"
+          @click="closeEditFields" 
+        />
+        <CustomButton 
+          class="text-white h-10 rounded" 
+          :buttonType="'save'" 
+          :value="'Save'" 
+        />
       </div>
     </form>
-    <div v-if="!editFields" class="flex justify-between bg-emerald-500 rounded w-full" :id="productID" @touchstart="e => getTouchStart(e)" @touchend="e => getTouchEnd(e)" @click="closeSideButtons">
+    <div 
+      v-if="!editFields" 
+      class="flex justify-between bg-emerald-500 rounded w-full" 
+      :id="productID" 
+      @touchstart="e => getTouchStart(e)" 
+      @touchend="e => getTouchEnd(e)" 
+      @click="closeButtons"
+    >
       <div class="m-4">
         <CustomText :value="productName" :isPrimary="true" />
         <CustomText :value="'Price: ' + '₱' + productPrice" :isPrimary="false" />
         <CustomText :value="'Quantity: ' + productQuantity + ' left'" :isPrimary="false" />
       </div>
       <div v-if="sideButtons" class="flex flex-col justify-center bg-white w-16 rounded">
-        <CustomButton class="text-emerald-900 bg-emerald-300 h-full rounded-tr" :buttonType="'else'" :value="'Edit'" @click="showEditFields"/>
-        <CustomButton class="bg-red-500 text-white h-full rounded-br" :buttonType="'else'" :value="'Delete'" @click="deleteProduct"/>
+        <CustomButton 
+          class="text-emerald-900 bg-emerald-300 h-full rounded-tr" 
+          :buttonType="'else'" 
+          :value="'Edit'" 
+          @click="showEditFields"
+        />
+        <CustomButton 
+          class="bg-red-500 text-white h-full rounded-br" 
+          :buttonType="'else'" 
+          :value="'Delete'" 
+          @click="deleteProduct"
+        />
       </div>
     </div>
-    <div v-if="quantityButtons" class="flex gap-2">
-      <CustomButton class="text-emerald-900 h-10 rounded" :buttonType="'cancel'" :value="'Cancel'"
-        @click="closeQuantityDecrease" />
-      <CustomButton class="text-black h-10 rounded" :buttonType="'else'" :value="'Decrease Quantity'"
-        @click="decreaseQuantity" />
-    </div>
+    <CustomButton
+      v-if="decreaseQuantityButton" 
+      class="text-black h-10 rounded" 
+      :buttonType="'else'" 
+      :value="'Decrease Quantity'"
+      @click="decreaseQuantity" 
+    />
   </div>
 
 </template>

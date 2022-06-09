@@ -5,10 +5,6 @@ import { productsColRef } from '../../../firebase-config';
 import InputSet from '../../common/input-set.vue';
 import CustomButton from '../../common/custom-button.vue';
 
-const productName = ref('')
-const price = ref()
-const quantity = ref()
-
 interface props {
   showComponent: boolean
   productList: any
@@ -18,6 +14,10 @@ const props = withDefaults(defineProps<props>(), {
   showComponent: false,
   productList: []
 });
+
+const productName = ref('')
+const price = ref()
+const quantity = ref()
 
 const submitHandler = e => {
   e.preventDefault();
@@ -34,8 +34,8 @@ const submitHandler = e => {
   const highest = Math.max(...props.productList.map(e => e.order), 0)
   addDoc(productsColRef, {
     name: productName.value,
-    price: Number(price.value),
-    quantity: Number(quantity.value),
+    price: price.value,
+    quantity: quantity.value,
     order: highest + 1
   })
   productName.value = ''
@@ -48,11 +48,11 @@ const getProductName = e => {
 }
 
 const getPrice = e => {
-  price.value = e.target.value
+  price.value = Number(e.target.value)
 }
 
 const getQuantity = e => {
-  quantity.value = e.target.value
+  quantity.value = Number(e.target.value)
 }
 
 </script>
@@ -60,15 +60,42 @@ const getQuantity = e => {
 <template>
   <div v-if="props.showComponent" class="bg-emerald-400 w-full p-4 drop-shadow-md rounded">
     <form class="flex flex-col gap-4" @submit="submitHandler">
-      <InputSet :isPrimary="true" :value="productName" :label="'Product Name'" :type="'text'" :placeholder="''"
-        :onChange="getProductName" />
-      <InputSet :isPrimary="true" :value="price" :label="'Price'" :type="'number'" :placeholder="''"
-        :onChange="getPrice" />
-      <InputSet :isPrimary="true" :value="quantity" :label="'Quantity'" :type="'number'" :placeholder="''" :onChange="getQuantity" />
+      <InputSet 
+        :isPrimary="true" 
+        :value="productName" 
+        :label="'Product Name'" 
+        :type="'text'" 
+        :placeholder="''"
+        :onChange="getProductName" 
+      />
+      <InputSet 
+        :isPrimary="true" 
+        :value="price" 
+        :label="'Price'" 
+        :type="'number'" 
+        :placeholder="''"
+        :onChange="getPrice"
+      />
+      <InputSet 
+        :isPrimary="true" 
+        :value="quantity" 
+        :label="'Quantity'" 
+        :type="'number'" 
+        :placeholder="''" 
+        :onChange="getQuantity" 
+      />
       <div class="flex justify-between items-center gap-4 w-full">
-        <CustomButton class="text-black h-10 rounded" :buttonType="'cancel'" :value="'Cancel'"
-          @click="$emit('cancelHandler')" />
-        <CustomButton class="text-white h-10 rounded" :buttonType="'save'" :value="'Save'" />
+        <CustomButton 
+          class="text-black h-10 rounded" 
+          :buttonType="'cancel'" 
+          :value="'Cancel'"
+          @click="$emit('cancelHandler')" 
+        />
+        <CustomButton 
+          class="text-white h-10 rounded" 
+          :buttonType="'save'" 
+          :value="'Save'" 
+        />
       </div>
     </form>
   </div>

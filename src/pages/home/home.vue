@@ -26,8 +26,18 @@ const setShowAddProductForm = () => {
 <template>
   <div class="flex flex-col justify-center items-center gap-4 w-full p-6">
     <p class="text-3xl text-white">Inventory</p>
-    <CustomButton class="h-12 rounded" v-if="!showAddProductForm" :buttonType="'else'" :value="'Add Product'" :onClick="setShowAddProductForm"/>
-    <AddProductForm :showComponent="showAddProductForm" :productList="productList" @cancelHandler="setShowAddProductForm"/>
+    <CustomButton 
+      v-if="!showAddProductForm" 
+      class="h-12 rounded"  
+      :buttonType="'else'" 
+      :value="'Add Product'" 
+      :onClick="setShowAddProductForm"
+    />
+    <AddProductForm 
+      :showComponent="showAddProductForm" 
+      :productList="productList" 
+      @cancelHandler="setShowAddProductForm"
+    />
     <InventoryList :productList="productList"/>
   </div>
 </template>
