@@ -72,7 +72,8 @@ const searchFunction = e => {
       <Product 
         :productID="product.id" 
         :productName="product.name" 
-        :productPrice="product.price"
+        :productActualPrice="product.actual_price"
+        :productRetailPrice="product.retail_price"
         :productQuantity="product.quantity" 
         :productOrder="product.order" 
       />
@@ -83,7 +84,8 @@ const searchFunction = e => {
       <Product 
         :productID="product.id" 
         :productName="product.name" 
-        :productPrice="product.price"
+        :productActualPrice="product.actual_price"
+        :productRetailPrice="product.retail_price"
         :productQuantity="product.quantity" 
         :productOrder="product.order" 
       />

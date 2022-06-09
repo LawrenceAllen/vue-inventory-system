@@ -9,7 +9,8 @@ import InputSet from '../../common/input-set.vue';
 interface props {
   productID: string
   productName: string
-  productPrice: number
+  productActualPrice: number
+  productRetailPrice: number
   productQuantity: number
   productOrder: number
 }
@@ -17,7 +18,8 @@ interface props {
 const props = withDefaults(defineProps<props>(), {
   productID: '',
   productName: '',
-  productPrice: 0,
+  productActualPrice: 0,
+  productRetailPrice: 0,
   productQuantity: 0,
   productOrder: 0
 });
@@ -28,7 +30,8 @@ const decreaseQuantityButton = ref(false)
 const sideButtons = ref(false)
 const editFields = ref(false)
 const newProductName = ref(props.productName)
-const newPrice = ref(props.productPrice)
+const newActualPrice = ref(props.productActualPrice)
+const newRetailPrice = ref(props.productRetailPrice)
 const newQuantity = ref(props.productQuantity)
 
 const checkDirection = () => {
@@ -56,7 +59,8 @@ const decreaseQuantity = () => {
   updateDoc(productDocRef, { quantity: props.productQuantity - 1 })
   addDoc(soldColRef, {
     name: props.productName,
-    date_sold: currentDate
+    date_sold: currentDate,
+    sold_at: props.productRetailPrice
   })
 }
 
@@ -77,8 +81,12 @@ const getNewProductName = e => {
   newProductName.value = e.target.value
 }
 
-const getNewPrice = e => {
-  newPrice.value = Number(e.target.value)
+const getNewActualPrice = e => {
+  newActualPrice.value = Number(e.target.value)
+}
+
+const getNewRetailPrice = e => {
+  newRetailPrice.value = Number(e.target.value)
 }
 
 const getNewQuantity = e => {
@@ -90,7 +98,8 @@ const updateProduct = e => {
   const productDocRef = doc(productsColRef, props.productID)
   updateDoc(productDocRef, {
     name: newProductName.value,
-    price: newPrice.value,
+    actual_price: newActualPrice.value,
+    retail_price: newRetailPrice.value,
     quantity: newQuantity.value,
   })
   closeEditFields()
@@ -117,11 +126,19 @@ const deleteProduct = e => {
       />
       <InputSet 
         :isPrimary="true" 
-        :value="newPrice" 
-        :label="'Price'" 
+        :value="newActualPrice" 
+        :label="'Actual Price'" 
         :type="'number'" 
         :placeholder="''"
-        :onChange="getNewPrice" 
+        :onChange="getNewActualPrice" 
+      />
+      <InputSet 
+        :isPrimary="true" 
+        :value="newRetailPrice" 
+        :label="'Retail Price'" 
+        :type="'number'" 
+        :placeholder="''"
+        :onChange="getNewRetailPrice" 
       />
       <InputSet 
         :isPrimary="true" 
@@ -155,7 +172,8 @@ const deleteProduct = e => {
     >
       <div class="m-4">
         <CustomText :value="productName" :isPrimary="true" />
-        <CustomText :value="'Price: ' + '₱' + productPrice" :isPrimary="false" />
+        <CustomText :value="'Actual Price: ' + '₱' + props.productActualPrice" :isPrimary="false" />
+        <CustomText :value="'Retail Price: ' + '₱' + props.productRetailPrice" :isPrimary="false" />
         <CustomText :value="'Quantity: ' + productQuantity + ' left'" :isPrimary="false" />
       </div>
       <div v-if="sideButtons" class="flex flex-col justify-center bg-white w-16 rounded">
