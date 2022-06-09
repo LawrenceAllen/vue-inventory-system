@@ -31,8 +31,6 @@ const checkDirection = () => {
       showQuantityButtons.value = true
     }
   }
-
-
 }
 
 const getTouchStart = e => {
@@ -63,11 +61,11 @@ const cancelQuantityDecrease = () => {
       <CustomText :value="'Price: ' + '₱' + productPrice" :isPrimary="false" />
       <CustomText :value="'Quantity: ' + productQuantity + ' left'" :isPrimary="false" />
     </div>
-    <div v-if="showQuantityButtons" class="flex flex-col gap-2">
-      <CustomButton class="text-black h-12" :buttonType="'else'" :value="'Decrease Quantity'"
-        @click="decreaseQuantity" />
+    <div v-if="showQuantityButtons" class="flex gap-2">
       <CustomButton class="text-emerald-900 h-10" :buttonType="'cancel'" :value="'Cancel'"
         @click="cancelQuantityDecrease" />
+      <CustomButton class="text-black h-10" :buttonType="'else'" :value="'Decrease Quantity'"
+        @click="decreaseQuantity" />
     </div>
   </div>
 
