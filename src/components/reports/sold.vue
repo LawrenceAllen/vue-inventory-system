@@ -5,12 +5,14 @@ interface props {
   currentMonth: string
   itemsSoldCurrentMonth: number
   salesCurrentMonth: number
+  profitCurrentMonth: number
 }
 
 const props = withDefaults(defineProps<props>(), {
   currentMonth: '',
   itemsSoldCurrentMonth: 0,
-  salesCurrentMonth: 0
+  salesCurrentMonth: 0,
+  profitCurrentMonth: 0
 })
 </script>
 
@@ -25,5 +27,10 @@ const props = withDefaults(defineProps<props>(), {
       <CustomText :isPrimary="true" :value="'Revenue: '"/>
       <CustomText :isPrimary="true" :value="'₱' + props.salesCurrentMonth"/>
     </div>
+    <div class="flex justify-between items-center my-2">
+      <CustomText :isPrimary="true" :value="'Profit: '"/>
+      <CustomText :isPrimary="true" :value="'₱' + props.profitCurrentMonth"/>
+    </div>
+    
   </div>
 </template>

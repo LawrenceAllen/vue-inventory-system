@@ -67,7 +67,8 @@ const decreaseQuantity = () => {
       name: props.productName,
       date_sold: currentDate,
       time_sold: currentTime,
-      sold_at: props.productRetailPrice
+      retail_price: props.productRetailPrice,
+      item_profit: props.productRetailPrice - props.productActualPrice
     })
     closeButtons()
     warningQuantitySingle.value = false
@@ -79,7 +80,8 @@ const decreaseQuantity = () => {
         name: props.productName,
         date_sold: currentDate,
         time_sold: currentTime,
-        sold_at: props.productRetailPrice
+        retail_price: props.productRetailPrice,
+        item_profit: props.productRetailPrice - props.productActualPrice
       })
     }
     warningQuantityMultiple.value = false
