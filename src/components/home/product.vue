@@ -29,10 +29,14 @@ const touchEndX = ref(0)
 const decreaseQuantityButton = ref(false)
 const sideButtons = ref(false)
 const editFields = ref(false)
+const quantityFields = ref(false)
+const warningQuantitySingle = ref(false)
+const warningQuantityMultiple = ref(false)
 const newProductName = ref(props.productName)
 const newActualPrice = ref(props.productActualPrice)
 const newRetailPrice = ref(props.productRetailPrice)
 const newQuantity = ref(props.productQuantity)
+const multipleQuantity = ref(0)
 
 const checkDirection = () => {
   if ((touchStartX.value - touchEndX.value) < -250) {
@@ -54,14 +58,33 @@ const getTouchEnd = e => {
 }
 
 const decreaseQuantity = () => {
+  const currentTime = new Date().toLocaleTimeString('en-US', {hour: "numeric", minute: "numeric"})
   const currentDate = new Date().toLocaleDateString('en-US', {month: "long", day: "numeric", year: "numeric"})
-  const productDocRef = doc(productsColRef, props.productID)
-  updateDoc(productDocRef, { quantity: props.productQuantity - 1 })
-  addDoc(soldColRef, {
-    name: props.productName,
-    date_sold: currentDate,
-    sold_at: props.productRetailPrice
-  })
+  if (multipleQuantity.value === 0) {
+    const productDocRef = doc(productsColRef, props.productID)
+    updateDoc(productDocRef, { quantity: props.productQuantity - 1 })
+    addDoc(soldColRef, {
+      name: props.productName,
+      date_sold: currentDate,
+      time_sold: currentTime,
+      sold_at: props.productRetailPrice
+    })
+    closeButtons()
+    warningQuantitySingle.value = false
+  } else {
+    const productDocRef = doc(productsColRef, props.productID)
+    updateDoc(productDocRef, { quantity: props.productQuantity - multipleQuantity.value })
+    for (let i = 0; i < multipleQuantity.value; i++) {
+      addDoc(soldColRef, {
+        name: props.productName,
+        date_sold: currentDate,
+        time_sold: currentTime,
+        sold_at: props.productRetailPrice
+      })
+    }
+    warningQuantityMultiple.value = false
+    multipleQuantity.value = 0
+  }
 }
 
 const closeButtons = () => {
@@ -109,6 +132,40 @@ const deleteProduct = e => {
   e.preventDefault()
   const productDocRef = doc(productsColRef, props.productID)
   deleteDoc(productDocRef)
+}
+
+const showQuantityFields = () => {
+  quantityFields.value = true
+}
+
+const closeQuantityFields = () => {
+  decreaseQuantityButton.value = true
+  quantityFields.value = false
+  multipleQuantity.value = 0
+}
+
+const showWarningQuantitySingle = () => {
+  closeButtons()
+  warningQuantitySingle.value = true
+}
+
+const closeWarningQuantitySingle = () => {
+  warningQuantitySingle.value = false
+}
+
+const getMultipleQuantity = e => {
+  multipleQuantity.value = e.target.value
+}
+
+const showWarningQuantityMultiple = () => {
+  closeButtons()
+  quantityFields.value = false
+  warningQuantityMultiple.value = true
+}
+
+const closeWarningQuantityMultiple = () => {
+  showQuantityFields()
+  warningQuantityMultiple.value = false
 }
 
 </script>
@@ -191,13 +248,89 @@ const deleteProduct = e => {
         />
       </div>
     </div>
-    <CustomButton
-      v-if="decreaseQuantityButton" 
-      class="text-black h-10 rounded" 
-      :buttonType="'else'" 
-      :value="'Decrease Quantity'"
-      @click="decreaseQuantity" 
-    />
+    <div v-if="warningQuantitySingle">
+      <CustomText class="text-white text-xl text-center mb-2" :value="'Are you sure?'" :isPrimary="true" />
+      <div class="flex justify-between items-center gap-2 w-full">
+        <CustomButton 
+          class="text-emerald-900 h-10 rounded" 
+          :buttonType="'else'" 
+          :value="'No'"
+          @click="closeWarningQuantitySingle"
+        />
+        <CustomButton
+          class="text-black h-10 rounded" 
+          :buttonType="'cancel'" 
+          :value="'Yes'" 
+          @click="decreaseQuantity"
+        />
+      </div>
+    </div>
+    <div v-if="!quantityFields" class="flex flex-col justify-center items-center gap-2">
+      <CustomText v-if="decreaseQuantityButton" class="text-white text-xl text-center" :value="'Decrease Quantity'" :isPrimary="true" />
+      <CustomButton
+        v-if="decreaseQuantityButton" 
+        class="text-black h-10 rounded" 
+        :buttonType="'else'" 
+        :value="'Single item'"
+        @click="showWarningQuantitySingle" 
+      />
+      <CustomButton
+        v-if="decreaseQuantityButton" 
+        class="text-black h-10 rounded" 
+        :buttonType="'else'" 
+        :value="'Multiple items'"
+        @click="showQuantityFields" 
+      />
+    </div>
+    <div v-if="warningQuantityMultiple">
+      <CustomText class="text-white text-xl text-center mb-2" :value="'Are you sure?'" :isPrimary="true" />
+      <div class="flex justify-between items-center gap-2 w-full">
+        <CustomButton 
+          class="text-emerald-900 h-10 rounded" 
+          :buttonType="'else'" 
+          :value="'No'"
+          @click="closeWarningQuantityMultiple"
+        />
+        <CustomButton
+          class="text-black h-10 rounded" 
+          :buttonType="'cancel'" 
+          :value="'Yes'" 
+          @click="decreaseQuantity"
+        />
+      </div>
+    </div>
+    <div v-if="quantityFields" class="flex flex-col justify-center items-center gap-2">
+      <CustomText class="text-white text-xl text-center" :value="'Enter number of items'" :isPrimary="true" />
+      <InputSet
+        :isPrimary="true" 
+        :value="multipleQuantity"
+        :label="''" 
+        :type="'number'" 
+        :placeholder="''"
+        :onChange="getMultipleQuantity" 
+      />
+      <div class="flex justify-between items-center gap-2 w-full">
+        <CustomButton 
+          class="text-emerald-900 h-10 rounded" 
+          :buttonType="'else'" 
+          :value="'Cancel'"
+          @click="closeQuantityFields"
+        />
+        <CustomButton
+          v-if="multipleQuantity !== 0" 
+          class="text-black h-10 rounded" 
+          :buttonType="'cancel'" 
+          :value="'Save'" 
+          @click="showWarningQuantityMultiple"
+        />
+        <CustomButton
+          v-else
+          class="text-black h-10 rounded" 
+          :buttonType="'cancel'" 
+          :value="'Save'" 
+        />
+      </div>
+    </div>
   </div>
 
 </template>

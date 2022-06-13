@@ -19,10 +19,15 @@ watchEffect(() => {
 
   const currentMonth = new Date().toLocaleDateString('en-US', {month: "long"})
   const currentYear = new Date().toLocaleDateString('en-US', {year: "numeric"})
+  // sets the current Month and Year
   monthYear.value = currentMonth + " " + currentYear
+
+  // returns the MONTH and YEAR from the date_sold property (June 13, 2022)
   currentMonthSoldItems.value = sortedSoldItemsList.value.map((e) => ({
     month: e.date_sold.split(" ").at(0) + " " + e.date_sold.split(" ").at(2)
   }))
+
+  // returns the items sold on the current month
   currentMonthSoldItems.value = currentMonthSoldItems.value.filter(e => e.month === monthYear.value)
 })
 
