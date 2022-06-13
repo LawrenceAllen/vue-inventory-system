@@ -3,12 +3,14 @@ import CustomText from '../../common/custom-text.vue';
 
 interface props {
   currentMonth: string
-  itemsSoldMonth: number
+  itemsSoldCurrentMonth: number
+  salesCurrentMonth: number
 }
 
 const props = withDefaults(defineProps<props>(), {
   currentMonth: '',
-  itemsSoldMonth: 0
+  itemsSoldCurrentMonth: 0,
+  salesCurrentMonth: 0
 })
 </script>
 
@@ -17,11 +19,11 @@ const props = withDefaults(defineProps<props>(), {
     <CustomText class="text-xl" :isPrimary="true" :value="props.currentMonth"/>
     <div class="flex justify-between items-center my-2">
       <CustomText :isPrimary="true" :value="'Items sold:'"/>
-      <CustomText :isPrimary="true" :value="String(props.itemsSoldMonth)"/>
+      <CustomText :isPrimary="true" :value="String(props.itemsSoldCurrentMonth)"/>
     </div>
     <div class="flex justify-between items-center my-2">
-      <CustomText :isPrimary="true" :value="'Profit: '"/>
-      <CustomText :isPrimary="true" :value="String(props.itemsSoldMonth)"/>
+      <CustomText :isPrimary="true" :value="'Revenue: '"/>
+      <CustomText :isPrimary="true" :value="'₱' + props.salesCurrentMonth"/>
     </div>
   </div>
 </template>
