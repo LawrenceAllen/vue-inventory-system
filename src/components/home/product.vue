@@ -152,6 +152,7 @@ const showWarningQuantitySingle = () => {
 }
 
 const closeWarningQuantitySingle = () => {
+  decreaseQuantityButton.value = true
   warningQuantitySingle.value = false
 }
 

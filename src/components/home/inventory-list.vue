@@ -59,7 +59,8 @@ const searchFunction = e => {
 </script>
 
 <template>
-  <InputSet 
+  <InputSet
+    class="mb-2" 
     :isPrimary="false" 
     :value="searchText" 
     :label="'Search'" 
