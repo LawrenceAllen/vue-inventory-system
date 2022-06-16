@@ -2,19 +2,26 @@
 import { onSnapshot } from '@firebase/firestore';
 import { ref, watchEffect } from 'vue';
 import { soldColRef } from '../../../firebase-config';
-import Sold from '../../components/reports/sold.vue'
-import CustomText from '../../common/custom-text.vue';
+import SoldMonths from '../../components/reports/sold-months.vue'
+import SoldDays from '../../components/reports/sold-days.vue'
 import CustomButton from '../../common/custom-button.vue';
 
 const soldItemsList = ref([])
 const sortedSoldItemsList = ref([])
 const currentMonthSoldItems = ref([])
+const currentDaySoldItems = ref([])
 const itemsSoldMonthList = ref([])
+const itemsSoldDayList = ref([])
 const currentMonthProfit = ref(0)
+const currentDayProfit = ref(0)
 const currentMonthSales = ref(0)
+const currentDaySales = ref(0)
 const latestMonth = ref('')
+const latestDay = ref('')
 const reducedMonthList = ref([])
+const reducedDayList = ref([])
 const index = ref(0)
+const isMonth = ref(false)
 
 onSnapshot(soldColRef, (snap) => {
   // returns the items from the firebase database
@@ -33,6 +40,17 @@ watchEffect(() => {
     }
   }
 
+  // returns the latest MONTH and DAY from the items that were sold
+  if (sortedSoldItemsList.value[0] !== undefined) {
+    const latestDate = sortedSoldItemsList.value[0]
+    if (latestDay.value === '') {
+      latestDay.value = latestDate.date_sold
+    }
+  }
+
+  // returns the items from the latest day
+  currentDaySoldItems.value = sortedSoldItemsList.value.filter(e => e.date_sold === latestDay.value)
+
   // returns the items from the latest month
   currentMonthSoldItems.value = sortedSoldItemsList.value.map((e) => ({
     month: e.date_sold.split(" ").at(0) + " " + e.date_sold.split(" ").at(2),
@@ -42,6 +60,9 @@ watchEffect(() => {
 
   // returns the month from the soldItemsList
   itemsSoldMonthList.value = sortedSoldItemsList.value.map((e) => e.date_sold.split(" ").at(0) + " " + e.date_sold.split(" ").at(2))
+
+  // returns the days from the sortedSoldItemsList
+  itemsSoldDayList.value = sortedSoldItemsList.value.map(e => e.date_sold)
 
   // reduces the size of months from itemsSoldMonthList
   if (itemsSoldMonthList.value.length !== 0) {
@@ -60,6 +81,31 @@ watchEffect(() => {
     temp = ''
     tempArray = []
   }
+
+  // reduces the size of days from currentDaySoldItems
+  if (itemsSoldDayList.value.length !== 0) {
+    let tempArray = []
+    let temp = currentDaySoldItems.value[0]
+
+    itemsSoldDayList.value.forEach(month => {
+      if (temp !== month) {
+        temp = month
+        tempArray.push(temp)
+      }
+    })
+
+    reducedDayList.value = tempArray
+    temp = ''
+    tempArray = []
+  }
+
+  // returns the sum of retail price from the items on currentDayRetailPrice
+  const currentDayRetailPrices = currentDaySoldItems.value.map(e => e.retail_price)
+  currentDaySales.value = currentDayRetailPrices.reduce((a, b) => a + b, 0)
+
+  // returns the sum of item profit from the items on currentDayItemProfit
+  const currentDayItemProfit = currentDaySoldItems.value.map(e => e.item_profit)
+  currentDayProfit.value = currentDayItemProfit.reduce((a, b) => a + b, 0)
 
   // returns the items based on the latestMonth value
   currentMonthSoldItems.value = currentMonthSoldItems.value.filter(e => e.month === latestMonth.value)
@@ -94,20 +140,59 @@ const traverseMonths = (string) => {
   }
 }
 
+const traverseDays = (string) => {
+  if (reducedDayList.value.length !== 0) {
+    if (string === "previous") {
+      index.value += 1
+      if (reducedDayList.value[index.value] === undefined) {
+        index.value -= 1
+      } else {
+        latestDay.value = reducedDayList.value[index.value]
+      }
+    } else {
+      index.value -= 1
+      if (reducedDayList.value[index.value] === undefined) {
+        index.value += 1
+      } else {
+        latestDay.value = reducedDayList.value[index.value]
+      }
+    }
+  }
+}
+
+const toggleMonths = () => {
+  if (isMonth.value) {
+    isMonth.value = false
+  } else {
+    isMonth.value = true
+  }
+}
+
 </script>
 
 <template>
   <div class="flex flex-col justify-center items-center gap-4 w-full">
     <p class="text-3xl text-white">Reports</p>
-    <div class="flex justify-between items-center bg-emerald-500 w-full rounded p-4">
-      <CustomText class="text-2xl" :isPrimary="true" :value="'<'" @click="() => traverseMonths('previous')"/>
-      <CustomButton class="text-xl text-center rounded w-40 drop-shadow" :buttonType="'cancel'" :value="latestMonth"/>
-      <CustomText class="text-2xl" :isPrimary="true" :value="'>'" @click="() => traverseMonths('next')"/>
-    </div>
-    <Sold 
+    <CustomButton v-if="isMonth" class="self-center text-xl text-center rounded w-full drop-shadow" :buttonType="'cancel'" :value="'Switch to Days'" @click="toggleMonths" />
+    <CustomButton v-else class="self-center text-xl text-center rounded w-full drop-shadow" :buttonType="'cancel'" :value="'Switch to Months'" @click="toggleMonths"/>
+    
+    <SoldMonths
+      v-if="isMonth"
+      :latestMonth="latestMonth" 
       :itemsSoldCurrentMonth="currentMonthSoldItems.length" 
       :salesCurrentMonth="currentMonthSales"
       :profitCurrentMonth="currentMonthProfit"
+      @previousHandler="traverseMonths('previous')"
+      @nextHandler="traverseMonths('next')"
+    />
+    <SoldDays 
+      v-else
+      :latestDay="latestDay"
+      :itemsSoldCurrentDay="currentDaySoldItems.length"
+      :salesCurrentDay="currentDaySales"
+      :profitCurrentDay="currentDayProfit"
+      @previousHandler="traverseDays('previous')"
+      @nextHandler="traverseDays('next')"
     />
   </div>
 </template>
