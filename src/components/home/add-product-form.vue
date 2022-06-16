@@ -68,7 +68,7 @@ const getQuantity = e => {
 </script>
 
 <template>
-  <div v-if="props.showComponent" class="bg-emerald-400 w-full p-4 drop-shadow-md rounded">
+  <div v-if="props.showComponent" class="bg-emerald-400 w-full p-4 m-4 drop-shadow-md rounded">
     <form class="flex flex-col gap-4" @submit="submitHandler">
       <InputSet 
         :isPrimary="true" 

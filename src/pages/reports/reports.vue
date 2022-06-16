@@ -6,6 +6,12 @@ import SoldMonths from '../../components/reports/sold-months.vue'
 import SoldDays from '../../components/reports/sold-days.vue'
 import CustomButton from '../../common/custom-button.vue';
 
+const emits = defineEmits(["clickHandler"])
+
+const clickHandler = () => {
+  emits("clickHandler")
+}
+
 const soldItemsList = ref([])
 const sortedSoldItemsList = ref([])
 const currentMonthSoldItems = ref([])
@@ -172,9 +178,18 @@ const toggleMonths = () => {
 
 <template>
   <div class="flex flex-col justify-center items-center gap-4 w-full">
-    <p class="text-3xl text-white">Reports</p>
-    <CustomButton v-if="isMonth" class="self-center text-xl text-center rounded w-full drop-shadow" :buttonType="'cancel'" :value="'Switch to Days'" @click="toggleMonths" />
-    <CustomButton v-else class="self-center text-xl text-center rounded w-full drop-shadow" :buttonType="'cancel'" :value="'Switch to Months'" @click="toggleMonths"/>
+    <div class="flex justify-between items-center gap-4 w-full">
+      <div class="flex justify-between items-center gap-1" @click="clickHandler">
+        <p class="text-2xl text-white">Reports</p>
+        <v-icon 
+          name="hi-solid-switch-horizontal" 
+          class="text-emerald-400"  
+          scale="1.5"
+        />
+      </div>
+      <CustomButton v-if="isMonth" class="self-center text-center rounded h-10 w-max px-4 drop-shadow" :buttonType="'else'" :value="'Switch to Days'" @click="toggleMonths" />
+      <CustomButton v-else class="self-center text-center rounded h-10 w-max px-4 drop-shadow" :buttonType="'else'" :value="'Switch to Months'" @click="toggleMonths"/>
+    </div>
     
     <SoldMonths
       v-if="isMonth"
