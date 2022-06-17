@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watchEffect } from 'vue'
+import { ref, watch, watchEffect } from 'vue'
 import CustomText from '../../common/custom-text.vue'
 import CustomButton from '../../common/custom-button.vue'
 import SoldDaysItem from './sold-days-item.vue'
@@ -28,19 +28,24 @@ const itemListSoldTime = ref([])
 const productNameValue = ref('')
 
 watchEffect(() => {
+  
+
+  
+})
+
+watchEffect(() => {
   // returns the sorted time
-  const sorted = props.itemListSoldCurrentDay.sort((a, b) => b.time_sold - a.time_sold)
-  sortedItemListSoldCurrentDay.value = sorted.map((e) => ({
+  sortedItemListSoldCurrentDay.value = props.itemListSoldCurrentDay.map((e) => ({
     name: e.name,
     date_sold: e.date_sold,
     time_sold: new Date(e.time_sold).toLocaleTimeString('en-us', {hour: 'numeric', minute: 'numeric'}),
     retail_price: e.retail_price,
     item_profit: e.item_profit
-  }))
+  })) 
 
   // reduces the size of sortedItemListSoldCurrentDay
-  const timeList = sortedItemListSoldCurrentDay.value
-  if (timeList.length !== 0) {
+  if (sortedItemListSoldCurrentDay.value.length !== 0) {
+    const timeList = sortedItemListSoldCurrentDay.value
     let tempArray = []
     let temp = timeList[0].name
     tempArray.push(timeList[0])
@@ -58,7 +63,6 @@ watchEffect(() => {
   }
 
   itemListSoldTime.value = sortedItemListSoldCurrentDay.value.filter(e => e.name === productNameValue.value)
-
 })
 
 const getProductName = (string) => {

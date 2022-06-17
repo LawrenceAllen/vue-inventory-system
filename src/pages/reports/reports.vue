@@ -124,6 +124,7 @@ watchEffect(() => {
   const currentMonthItemProfit = currentMonthSoldItems.value.map(e => e.item_profit)
   currentMonthProfit.value = currentMonthItemProfit.reduce((a, b) => a + b, 0)
 
+  currentDaySoldItems.value.sort((a, b) => b.time_sold - a.time_sold)
 })
 
 const traverseMonths = (string) => {
@@ -190,7 +191,6 @@ const toggleMonths = () => {
       <CustomButton v-if="isMonth" class="self-center text-center rounded h-10 w-max px-4 drop-shadow" :buttonType="'else'" :value="'Switch to Days'" @click="toggleMonths" />
       <CustomButton v-else class="self-center text-center rounded h-10 w-max px-4 drop-shadow" :buttonType="'else'" :value="'Switch to Months'" @click="toggleMonths"/>
     </div>
-    
     <SoldMonths
       v-if="isMonth"
       :latestMonth="latestMonth" 
