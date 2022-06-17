@@ -4,7 +4,7 @@ import CustomText from '../../common/custom-text.vue'
 import CustomButton from '../../common/custom-button.vue'
 import SoldDaysItem from './sold-days-item.vue'
 
-const emits = defineEmits(["previousHandler", "nextHandler"])
+const emits = defineEmits(["previousHandler", "nextHandler", "openDayList"])
 
 const previousHandler = () => {
   emits("previousHandler")
@@ -12,6 +12,10 @@ const previousHandler = () => {
 
 const nextHandler = () => {
   emits("nextHandler")
+}
+
+const openDayList = () => {
+  emits("openDayList")
 }
 
 const props = defineProps({
@@ -77,6 +81,7 @@ const getProductName = (string) => {
       class="text-xl text-center rounded w-max px-4 drop-shadow" 
       :buttonType="'cancel'" 
       :value="props.latestDay"
+      :onClick="openDayList"
     />
     <CustomText 
       class="text-2xl" 

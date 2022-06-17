@@ -5,6 +5,7 @@ import { soldColRef } from '../../../firebase-config';
 import SoldMonths from '../../components/reports/sold-months.vue'
 import SoldDays from '../../components/reports/sold-days.vue'
 import CustomButton from '../../common/custom-button.vue';
+import SoldDaysList from '../../components/reports/sold-days-list.vue';
 
 const emits = defineEmits(["clickHandler"])
 
@@ -28,6 +29,7 @@ const reducedMonthList = ref([])
 const reducedDayList = ref([])
 const index = ref(0)
 const isMonth = ref(false)
+const showDayList = ref(false)
 
 onSnapshot(soldColRef, (snap) => {
   // returns the items from the firebase database
@@ -175,6 +177,17 @@ const toggleMonths = () => {
   }
 }
 
+const changeDay = (string) => {
+  latestDay.value = string
+  if (showDayList.value) {
+    showDayList.value = false
+  }
+}
+
+const openDayList = () => {
+  showDayList.value = true
+}
+
 </script>
 
 <template>
@@ -209,6 +222,12 @@ const toggleMonths = () => {
       :profitCurrentDay="currentDayProfit"
       @previousHandler="traverseDays('previous')"
       @nextHandler="traverseDays('next')"
+      @openDayList="openDayList"
+    />
+    <SoldDaysList 
+      v-if="showDayList"
+      :dayList="reducedDayList"
+      @clickHandler="changeDay"
     />
   </div>
 </template>
