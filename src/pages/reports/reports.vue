@@ -186,12 +186,20 @@ const changeDay = (string) => {
   }
 }
 
-const openDayList = () => {
-  showDayList.value = true
+const toggleDayList = () => {
+  if (showDayList.value) {
+    showDayList.value = false
+  } else {
+    showDayList.value = true
+  }
 }
 
-const openMonthList = () => {
-  showMonthList.value = true
+const toggleMonthList = () => {
+  if (showMonthList.value) {
+    showMonthList.value = false
+  } else {
+    showMonthList.value = true
+  }
 }
 
 const changeMonth = (string) => {
@@ -225,7 +233,7 @@ const changeMonth = (string) => {
       :profitCurrentMonth="currentMonthProfit"
       @previousHandler="traverseMonths('previous')"
       @nextHandler="traverseMonths('next')"
-      @openMonthList="openMonthList"
+      @openMonthList="toggleMonthList"
     />
     <SoldDays 
       v-else
@@ -236,17 +244,19 @@ const changeMonth = (string) => {
       :profitCurrentDay="currentDayProfit"
       @previousHandler="traverseDays('previous')"
       @nextHandler="traverseDays('next')"
-      @openDayList="openDayList"
+      @openDayList="toggleDayList"
     />
     <SoldDaysList 
       v-if="showDayList"
       :dayList="reducedDayList"
       @clickHandler="changeDay"
+      @closeDayList="toggleDayList"
     />
     <SoldMonthsList
       v-if="showMonthList"
       :monthList="reducedMonthList"
       @clickHandler="changeMonth"
+      @closeMonthList="toggleMonthList"
     />
   </div>
 </template>
