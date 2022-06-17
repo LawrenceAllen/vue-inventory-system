@@ -58,7 +58,7 @@ const getTouchEnd = e => {
 }
 
 const decreaseQuantity = () => {
-  const currentTime = new Date().toLocaleTimeString('en-US', {hour: "numeric", minute: "numeric"})
+  const currentTime = new Date().getTime()
   const currentDate = new Date().toLocaleDateString('en-US', {month: "long", day: "numeric", year: "numeric"})
   if (multipleQuantity.value === 0) {
     const productDocRef = doc(productsColRef, props.productID)

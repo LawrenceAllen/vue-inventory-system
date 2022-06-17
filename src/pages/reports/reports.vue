@@ -35,7 +35,7 @@ onSnapshot(soldColRef, (snap) => {
 })
 
 watchEffect(() => {
-  // returns the latest items that were sold
+  // returns the sorted latest items that were sold
   sortedSoldItemsList.value = soldItemsList.value.sort((a, b) => Date.parse(b.date_sold) - Date.parse(a.date_sold))
 
   // returns the latest MONTH and YEAR from the items that were sold
@@ -204,6 +204,7 @@ const toggleMonths = () => {
       v-else
       :latestDay="latestDay"
       :itemsSoldCurrentDay="currentDaySoldItems.length"
+      :itemListSoldCurrentDay="currentDaySoldItems"
       :salesCurrentDay="currentDaySales"
       :profitCurrentDay="currentDayProfit"
       @previousHandler="traverseDays('previous')"

@@ -1,6 +1,9 @@
-<script lang="ts" setup>
+<script setup>
 import CustomText from '../../common/custom-text.vue'
 import CustomButton from '../../common/custom-button.vue'
+import SoldDaysItem from './sold-days-item.vue'
+import SoldDaysItemList from './sold-days-item-list.vue'
+import { ref, watchEffect } from 'vue';
 
 const emits = defineEmits(["previousHandler", "nextHandler"])
 
@@ -12,24 +15,61 @@ const nextHandler = () => {
   emits("nextHandler")
 }
 
-interface props {
-  latestDay: string
-  itemsSoldCurrentDay: number
-  salesCurrentDay: number
-  profitCurrentDay: number
-}
-
-const props = withDefaults(defineProps<props>(), {
-  latestDay: '',
-  itemsSoldCurrentDay: 0,
-  salesCurrentDay: 0,
-  profitCurrentDay: 0
+const props = defineProps({
+  latestDay: String,
+  itemsSoldCurrentDay: Number,
+  itemListSoldCurrentDay: Array,
+  salesCurrentDay: Number,
+  profitCurrentDay: Number,
 })
+
+const sortedItemListSoldCurrentDay = ref([])
+const reducedTimeList = ref([])
+const itemListSoldTime = ref([])
+const productNameValue = ref('')
+
+watchEffect(() => {
+  // returns the sorted time
+  const sorted = props.itemListSoldCurrentDay.sort((a, b) => b.time_sold - a.time_sold)
+  sortedItemListSoldCurrentDay.value = sorted.map((e) => ({
+    name: e.name,
+    date_sold: e.date_sold,
+    time_sold: new Date(e.time_sold).toLocaleTimeString('en-us', {hour: 'numeric', minute: 'numeric'}),
+    retail_price: e.retail_price,
+    item_profit: e.item_profit
+  }))
+
+  // reduces the size of sortedItemListSoldCurrentDay
+  const timeList = sortedItemListSoldCurrentDay.value
+  if (timeList.length !== 0) {
+    let tempArray = []
+    let temp = timeList[0].name
+    tempArray.push(timeList[0])
+
+    timeList.forEach(e => {
+      if (temp !== e.name) {
+        temp = e.name
+        tempArray.push(e)
+      }
+    })
+    
+    reducedTimeList.value = tempArray
+    temp = ''
+    tempArray = []
+  }
+
+  itemListSoldTime.value = sortedItemListSoldCurrentDay.value.filter(e => e.name === productNameValue.value)
+
+})
+
+const getProductName = (string) => {
+  productNameValue.value = string
+}
 
 </script>
 
 <template>
-   <div class="flex justify-between items-center bg-emerald-500 w-full rounded p-4">
+  <div class="flex justify-between items-center bg-emerald-500 w-full rounded p-4">
     <CustomText 
       class="text-2xl" 
       :isPrimary="true" 
@@ -60,6 +100,17 @@ const props = withDefaults(defineProps<props>(), {
     <div class="flex justify-between items-center my-2">
       <CustomText class="text-lg" :isPrimary="true" :value="'Profit: '"/>
       <CustomText :isPrimary="true" :value="'₱' + props.profitCurrentDay"/>
+    </div>
+  </div>
+  <div class="flex flex-col gap-4 w-full h-96">
+    <div v-for="item in reducedTimeList" class="flex flex-col gap-2">
+      <SoldDaysItem
+        :key="item.id" 
+        :productName="item.name"
+        :timeSold="item.time_sold"
+        :itemList="itemListSoldTime"
+        @clickHandler="getProductName(item.name)"
+      />
     </div>
   </div>
 </template>
