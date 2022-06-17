@@ -1,4 +1,4 @@
-<script lang="ts" setup>
+<script setup>
 
 const emits = defineEmits(["onChange"])
 
@@ -6,22 +6,13 @@ const onChange = () => {
   emits("onChange")
 }
 
-interface props {
-  isPrimary: boolean
-  value: any
-  label: string
-  type: string
-  placeholder: string
-}
-
-const props = withDefaults(defineProps<props>(), {
-  isPrimary: true,
-  value: '',
-  label: 'Input Label',
-  type: "text",
-  placeholder: ''
- 
-});
+const props = defineProps({
+  isPrimary: Boolean,
+  value: String,
+  label: String,
+  type: String,
+  placeholder: String
+})
 
 </script>
 

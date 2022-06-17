@@ -1,14 +1,9 @@
-<script lang="ts" setup>
+<script setup>
 
-interface props {
-  value: string
-  isPrimary: boolean
-}
-
-const props = withDefaults(defineProps<props>(), {
-  value: "Text",
-  isPrimary: true
-});
+const props = defineProps({
+  value: String,
+  isPrimary: Boolean
+})
 
 </script>
 

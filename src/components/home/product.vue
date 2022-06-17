@@ -1,4 +1,4 @@
-<script lang="ts" setup>
+<script setup>
 import { ref } from 'vue';
 import { productsColRef, soldColRef } from '../../../firebase-config';
 import { doc, addDoc, updateDoc, deleteDoc } from 'firebase/firestore';
@@ -6,23 +6,14 @@ import CustomText from '../../common/custom-text.vue';
 import CustomButton from '../../common/custom-button.vue';
 import InputSet from '../../common/input-set.vue';
 
-interface props {
-  productID: string
-  productName: string
-  productActualPrice: number
-  productRetailPrice: number
-  productQuantity: number
-  productOrder: number
-}
-
-const props = withDefaults(defineProps<props>(), {
-  productID: '',
-  productName: '',
-  productActualPrice: 0,
-  productRetailPrice: 0,
-  productQuantity: 0,
-  productOrder: 0
-});
+const props = defineProps({
+  productID: String,
+  productName: String,
+  productActualPrice: Number,
+  productRetailPrice: Number,
+  productQuantity: Number,
+  productOrder: Number,
+})
 
 const touchStartX = ref(0)
 const touchEndX = ref(0)

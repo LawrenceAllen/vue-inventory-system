@@ -1,4 +1,4 @@
-<script lang="ts" setup>
+<script setup>
 
 const emits = defineEmits(["onClick"])
 
@@ -6,15 +6,10 @@ const onClick = () => {
   emits("onClick")
 }
 
-interface props {
-  buttonType: string
-  value: string
-}
-
-const props = withDefaults(defineProps<props>(), {
-  isPrimary: true,
-  value: "Button"
-});
+const props = defineProps({
+  buttonType: String,
+  value: String
+})
 
 </script>
 

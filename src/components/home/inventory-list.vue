@@ -1,15 +1,11 @@
-<script lang="ts" setup>
+<script setup>
 import { ref, watchEffect } from 'vue';
 import InputSet from '../../common/input-set.vue';
 import Product from './product.vue';
 
-interface props {
-  productList: any
-}
-
-const props = withDefaults(defineProps<props>(), {
-  productList: []
-});
+const props = defineProps({
+  productList: Array
+})
 
 const searchText = ref('')
 const displayInventoryList = ref([])

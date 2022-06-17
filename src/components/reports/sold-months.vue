@@ -1,4 +1,4 @@
-<script lang="ts" setup>
+<script setup>
 import CustomText from '../../common/custom-text.vue';
 import CustomButton from '../../common/custom-button.vue';
 
@@ -12,19 +12,13 @@ const nextHandler = () => {
   emits("nextHandler")
 }
 
-interface props {
-  latestMonth: string
-  itemsSoldCurrentMonth: number
-  salesCurrentMonth: number
-  profitCurrentMonth: number
-}
-
-const props = withDefaults(defineProps<props>(), {
-  latestMonth: '',
-  itemsSoldCurrentMonth: 0,
-  salesCurrentMonth: 0,
-  profitCurrentMonth: 0
+const props = defineProps({
+  latestMonth: String,
+  itemsSoldCurrentMonth: Number,
+  salesCurrentMonth: Number,
+  profitCurrentMonth: Number
 })
+
 </script>
 
 <template>

@@ -31,7 +31,6 @@ const setShowAddProductForm = () => {
 
 <template>
   <div class="flex flex-col justify-center items-center gap-2 w-full">
-    
     <div class="flex justify-between items-center gap-4 w-full">
       <div class="flex justify-between items-center gap-1" @click="clickHandler">
         <p class="text-2xl text-white">Inventory</p>
@@ -46,7 +45,7 @@ const setShowAddProductForm = () => {
         class="h-10 w-max px-4 rounded"  
         :buttonType="'else'" 
         :value="'Add Product'" 
-        :onClick="setShowAddProductForm"
+        @onClick="setShowAddProductForm"
       />
     </div>
     <AddProductForm 

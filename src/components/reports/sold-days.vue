@@ -1,9 +1,8 @@
 <script setup>
+import { ref, watchEffect } from 'vue'
 import CustomText from '../../common/custom-text.vue'
 import CustomButton from '../../common/custom-button.vue'
 import SoldDaysItem from './sold-days-item.vue'
-import SoldDaysItemList from './sold-days-item-list.vue'
-import { ref, watchEffect } from 'vue';
 
 const emits = defineEmits(["previousHandler", "nextHandler"])
 

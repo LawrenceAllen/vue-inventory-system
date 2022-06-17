@@ -1,19 +1,20 @@
-<script lang="ts" setup>
+<script setup>
 import { ref } from 'vue';
 import { addDoc } from 'firebase/firestore';
 import { productsColRef } from '../../../firebase-config';
 import InputSet from '../../common/input-set.vue';
 import CustomButton from '../../common/custom-button.vue';
 
-interface props {
-  showComponent: boolean
-  productList: any
+const emits = defineEmits(['cancelHandler'])
+
+const cancelHandler = () => {
+  emits('cancelHandler')
 }
 
-const props = withDefaults(defineProps<props>(), {
-  showComponent: false,
-  productList: []
-});
+const props = defineProps({
+  showComponent: Boolean,
+  productList: Array
+})
 
 const productName = ref('')
 const actualPrice = ref()
@@ -107,7 +108,7 @@ const getQuantity = e => {
           class="text-black h-10 rounded" 
           :buttonType="'cancel'" 
           :value="'Cancel'"
-          @click="$emit('cancelHandler')" 
+          @click="cancelHandler" 
         />
         <CustomButton 
           class="text-white h-10 rounded" 
