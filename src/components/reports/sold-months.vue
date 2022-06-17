@@ -2,7 +2,7 @@
 import CustomText from '../../common/custom-text.vue';
 import CustomButton from '../../common/custom-button.vue';
 
-const emits = defineEmits(["previousHandler", "nextHandler"])
+const emits = defineEmits(["previousHandler", "nextHandler", "openMonthList"])
 
 const previousHandler = () => {
   emits("previousHandler")
@@ -10,6 +10,10 @@ const previousHandler = () => {
 
 const nextHandler = () => {
   emits("nextHandler")
+}
+
+const openMonthList = () => {
+  emits("openMonthList")
 }
 
 const props = defineProps({
@@ -33,6 +37,7 @@ const props = defineProps({
       class="text-xl text-center rounded w-40 drop-shadow" 
       :buttonType="'cancel'" 
       :value="props.latestMonth"
+      :onClick="openMonthList"
     />
     <CustomText 
       class="text-2xl" 
