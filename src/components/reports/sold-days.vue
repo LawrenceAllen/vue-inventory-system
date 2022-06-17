@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch, watchEffect } from 'vue'
+import { ref, watchEffect } from 'vue'
 import CustomText from '../../common/custom-text.vue'
 import CustomButton from '../../common/custom-button.vue'
 import SoldDaysItem from './sold-days-item.vue'
@@ -26,12 +26,6 @@ const sortedItemListSoldCurrentDay = ref([])
 const reducedTimeList = ref([])
 const itemListSoldTime = ref([])
 const productNameValue = ref('')
-
-watchEffect(() => {
-  
-
-  
-})
 
 watchEffect(() => {
   // returns the sorted time
